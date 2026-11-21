@@ -29,7 +29,7 @@ canvas#game { position: fixed; inset: 0; z-index: 1; display: block; width: 100%
 #crt { position: fixed; z-index: 2; pointer-events: none; display: none;
   background-image: linear-gradient(to bottom, rgba(0,0,0,0) 0, rgba(0,0,0,0) 60%, rgba(0,0,0,.15) 60%, rgba(0,0,0,.15) 100%);
   box-shadow: inset 0 0 90px rgba(0,0,0,.45); }
-.ss-modal { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(10,12,16,.7); font-family: FONT; -webkit-user-select: text; user-select: text; }
+.ss-modal { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(10,12,16,.7); font-family: FONT; font-variant-ligatures: none; font-feature-settings: 'liga' 0, 'clig' 0; -webkit-user-select: text; user-select: text; }
 .ss-card { position: relative; width: min(560px, 100%); max-height: 100%; overflow-y: auto; box-sizing: border-box; padding: 20px 24px; border-radius: 0; background: #fff8e8; color: #3a2a1e; border: 6px solid #3a2a1e; box-shadow: 8px 8px 0 rgba(0,0,0,.4); }
 .ss-card h2 { margin: 0 0 6px; font: 700 28px FONT; color: #2a5a2a; }
 .ss-card h3 { margin: 18px 0 4px; font: 700 20px FONT; color: #a02828; }
@@ -40,6 +40,7 @@ canvas#game { position: fixed; inset: 0; z-index: 1; display: block; width: 100%
 .ss-card input[hidden] { display: none; }
 .ss-row { display: flex; gap: 10px; align-items: center; margin: 8px 0; }
 .ss-row input { margin-top: 0; flex: 1; min-width: 0; font-family: ui-monospace, Menlo, monospace; font-size: 15px; }
+.ss-btn, .ss-link, .ss-x, .ss-card input { font-variant-ligatures: none; }
 .ss-btn { flex: none; padding: 10px 16px; font: 700 17px FONT; color: #fff8e8; background: #7a4a28; border: 3px solid #101418; border-radius: 0; box-shadow: 4px 4px 0 rgba(0,0,0,.35); cursor: pointer; }
 .ss-btn.go { background: #4fa83a; }
 .ss-btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 rgba(0,0,0,.35); }
@@ -50,6 +51,7 @@ canvas#game { position: fixed; inset: 0; z-index: 1; display: block; width: 100%
 .ss-msg { min-height: 22px; margin: 6px 0; font-weight: 700; font-size: 15px; color: #2a5a2a; }
 .ss-msg.bad { color: #a02828; }
 @media (max-height: 500px) { .ss-card { padding: 14px 18px; } .ss-card h3 { margin-top: 10px; } .ss-card p { margin: 4px 0 6px; } }
+.ss-modal, .ss-modal * { font-variant-ligatures: none !important; font-feature-settings: 'liga' 0, 'clig' 0 !important; }
 """.replace('FONT', FONT)
 pre = ("<script>window.SPROUT_SAVE_KEY = 'sproutSiegeRetro.save.v1'; window.SPROUT_FONT_D = window.SPROUT_FONT_B = '%s';"
        " window.SPROUT_CLOUD_CONFIG = null;</script>\n" % FONT.replace('"', '\\"'))

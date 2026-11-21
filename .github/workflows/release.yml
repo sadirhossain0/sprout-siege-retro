@@ -1,0 +1,65 @@
+# Builds every platform and publishes a GitHub Release.
+# Runs when release/version.txt changes on main (or by hand from the Actions tab).
+name: Build and publish release
+
+on:
+  push:
+    branches: [main]
+    paths: ['release/version.txt']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: v
+        run: |
+          V=$(tr -d '[:space:]' < release/version.txt)
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "short=${V%.*}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build the web game
+        run: cd source/retro && python3 build-retro.py
+
+      - name: Package Windows and Mac apps
+        run: |
+          curl -sSL -o /tmp/rcodesign.tgz "https://github.com/indygreg/apple-platform-rs/releases/download/apple-codesign%2F0.29.0/apple-codesign-0.29.0-x86_64-unknown-linux-musl.tar.gz"
+          tar xzf /tmp/rcodesign.tgz -C /tmp
+          cd source/retro/desktop
+          npm install --no-audit --no-fund
+          RCODESIGN=/tmp/apple-codesign-0.29.0-x86_64-unknown-linux-musl/rcodesign bash package-all.sh
+
+      - name: Collect release files
+        run: |
+          V="${{ steps.v.outputs.short }}"
+          mkdir -p out
+          cp "downloads/SproutSiegeRetro-$V-Android.apk" out/
+          mv source/retro/dist-desktop/SproutSiegeRetro-Windows.zip "out/SproutSiegeRetro-$V-Windows.zip"
+          mv source/retro/dist-desktop/SproutSiegeRetro-Mac-AppleSilicon.zip "out/SproutSiegeRetro-$V-Mac-AppleSilicon.zip"
+          mv source/retro/dist-desktop/SproutSiegeRetro-Mac-Intel.zip "out/SproutSiegeRetro-$V-Mac-Intel.zip"
+          (cd source/retro/dist-pwa && zip -qr "../../../out/SproutSiegeRetro-$V-Web.zip" index.html sw.js manifest.webmanifest icons)
+          ls -la out
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.v.outputs.version }}
+          name: Sprout Siege Retro ${{ steps.v.outputs.version }}
+          body_path: release/notes-${{ steps.v.outputs.version }}.md
+          files: out/*
+          make_latest: true
+          overwrite_files: true

@@ -1,0 +1,10 @@
+source/retro/dist/
+source/retro/dist-pwa/
+source/retro/dist-apk/
+source/retro/dist-desktop/
+source/retro/android/build/
+source/retro/android/assets/
+source/retro/android/*.keystore
+source/retro/desktop/node_modules/
+source/retro/desktop/out/
+source/retro/desktop/app/game/

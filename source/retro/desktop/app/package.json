@@ -1,0 +1,9 @@
+{
+  "name": "sprout-siege-retro",
+  "productName": "Sprout Siege Retro",
+  "version": "1.0.0",
+  "description": "Sprout Siege Retro: a pixel-art garden defense game",
+  "main": "main.js",
+  "author": "Sprout Siege",
+  "license": "UNLICENSED"
+}
